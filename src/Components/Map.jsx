@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import Marker from './Marker';
 
 function Map() {
   // img의 top, left
@@ -77,13 +78,7 @@ function Map() {
           <Markers posX={posX} posY={posY}>
             {markers &&
               markers.map((item) => (
-                <Marker
-                  key={item[0]}
-                  markerX={item[1] - 44}
-                  markerY={item[2] - 130}
-                >
-                  <img src={process.env.PUBLIC_URL + '/images/marker.png'} />
-                </Marker>
+                <Marker markerX={item[1] - 75} markerY={item[2] - 160} />
               ))}
           </Markers>
         </MapImage>
@@ -118,12 +113,6 @@ const Markers = styled.ul`
   width: 2907px;
   height: 3460px;
   top: 0px;
-`;
-
-const Marker = styled.li`
-  position: absolute;
-  top: ${(props) => props.markerY + 'px'};
-  left: ${(props) => props.markerX + 'px'};
 `;
 
 const MapCounter = styled.div`
