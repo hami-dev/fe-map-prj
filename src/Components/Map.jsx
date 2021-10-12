@@ -16,16 +16,19 @@ function Map() {
   // 지도 image
   const mapImage = useRef();
 
+  // 마커
+  const [markers, setMarkers] = useState([]);
+
   useEffect(() => {}, [posX, posY]);
+
+  useEffect(() => {
+    console.log('markers', markers);
+  }, [markers]);
 
   const onDragStart = (e) => {
     setOriginX(e.clientX);
     setOriginY(e.clientY);
     setIsDrag(true);
-  };
-
-  const onDrag = (e) => {
-    // console.log('dragging...');
   };
 
   const onDragEnd = (e) => {
@@ -54,6 +57,15 @@ function Map() {
     setIsDrag(false);
   };
 
+  // 우클릭 시
+  const onContextMenu = (e) => {
+    e.preventDefault();
+    const tempX = e.clientX;
+    const tempY = e.clientY;
+    const tempMark = [markers.length + 1, tempX - posX, tempY - posY]; // marker 번호, X, Y
+    setMarkers((prev) => [...prev, tempMark]);
+  };
+
   return (
     <>
       <MapWrapper>
@@ -62,15 +74,27 @@ function Map() {
           posY={posY}
           draggable
           onDragStart={onDragStart}
-          onDrag={onDrag}
           onDragEnd={onDragEnd}
+          onContextMenu={onContextMenu}
         >
-          {/* 2907 * 3460 */}
           <img
             src={process.env.PUBLIC_URL + '/images/map.png'}
             ref={mapImage}
           />
+          <Markers posX={posX} posY={posY}>
+            {markers &&
+              markers.map((item) => (
+                <Marker
+                  key={item[0]}
+                  markerX={item[1] - 44}
+                  markerY={item[2] - 130}
+                >
+                  <img src={process.env.PUBLIC_URL + '/images/marker.png'} />
+                </Marker>
+              ))}
+          </Markers>
         </MapImage>
+        <MapCounter>📌I have {markers.length} markers</MapCounter>
       </MapWrapper>
     </>
   );
@@ -79,14 +103,36 @@ function Map() {
 const MapWrapper = styled.div`
   width: 1024px;
   height: 768px;
-  border: 1px solid black;
+  border: 1px solid #d0b6b6;
   overflow: hidden;
 `;
 
 const MapImage = styled.div`
   position: relative;
+  width: 2907px;
+  height: 3460px;
   top: ${(props) => props.posY + 'px'};
   left: ${(props) => props.posX + 'px'};
+`;
+
+const Markers = styled.ul`
+  position: absolute;
+  width: 2907px;
+  height: 3460px;
+  top: 0px;
+`;
+
+const Marker = styled.li`
+  position: absolute;
+  top: ${(props) => props.markerY + 'px'};
+  left: ${(props) => props.markerX + 'px'};
+`;
+
+const MapCounter = styled.div`
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  font-size: 2.5rem;
 `;
 
 export default Map;
