@@ -22,28 +22,28 @@ function Map() {
   };
 
   const onDragEnd = (e) => {
-    const tempX = e.clientX;
-    const tempY = e.clientY;
-    const chaX = tempX - originX;
-    const chaY = tempY - originY;
-    if (posX + chaX > 0) {
+    const chaX = e.clientX - originX;
+    const chaY = e.clientY - originY;
+    const nx = posX + chaX;
+    const ny = posY + chaY;
+    if (nx > 0) {
       setPosX(0);
       return;
     }
-    if (posX + chaX < (mapImage.current.width - 1024) * -1) {
+    if (nx < (mapImage.current.width - 1024) * -1) {
       setPosX((mapImage.current.width - 1024) * -1);
       return;
     }
-    if (posY + chaY > 0) {
+    if (ny > 0) {
       setPosY(0);
       return;
     }
-    if (posY + chaY < (mapImage.current.height - 768) * -1) {
+    if (ny < (mapImage.current.height - 768) * -1) {
       setPosY((mapImage.current.height - 768) * -1);
       return;
     }
-    setPosX(posX + chaX);
-    setPosY(posY + chaY);
+    setPosX(nx);
+    setPosY(ny);
   };
 
   // 우클릭 시
@@ -102,6 +102,7 @@ const MapWrapper = styled.div`
   height: 768px;
   border: 1px solid #d0b6b6;
   overflow: hidden;
+  margin: 3rem 3rem;
 `;
 
 const MapImage = styled.div`
