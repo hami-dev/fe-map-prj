@@ -10,25 +10,15 @@ function Map() {
   const [originX, setOriginX] = useState(0);
   const [originY, setOriginY] = useState(0);
 
-  // drag 중인지 확인
-  const [isDrag, setIsDrag] = useState(false);
-
   // 지도 image
   const mapImage = useRef();
 
   // 마커
   const [markers, setMarkers] = useState([]);
 
-  useEffect(() => {}, [posX, posY]);
-
-  useEffect(() => {
-    console.log('markers', markers);
-  }, [markers]);
-
   const onDragStart = (e) => {
     setOriginX(e.clientX);
     setOriginY(e.clientY);
-    setIsDrag(true);
   };
 
   const onDragEnd = (e) => {
@@ -54,7 +44,6 @@ function Map() {
     }
     setPosX(posX + chaX);
     setPosY(posY + chaY);
-    setIsDrag(false);
   };
 
   // 우클릭 시
@@ -64,6 +53,10 @@ function Map() {
     const tempY = e.clientY;
     const tempMark = [markers.length + 1, tempX - posX, tempY - posY]; // marker 번호, X, Y
     setMarkers((prev) => [...prev, tempMark]);
+  };
+
+  const handleReset = () => {
+    setMarkers([]);
   };
 
   return (
@@ -95,12 +88,16 @@ function Map() {
           </Markers>
         </MapImage>
         <MapCounter>📌I have {markers.length} markers</MapCounter>
+        <ResetButton onClick={handleReset}>
+          <img src={process.env.PUBLIC_URL + '/images/reset.png'} />
+        </ResetButton>
       </MapWrapper>
     </>
   );
 }
 
 const MapWrapper = styled.div`
+  position: relative;
   width: 1024px;
   height: 768px;
   border: 1px solid #d0b6b6;
@@ -129,10 +126,20 @@ const Marker = styled.li`
 `;
 
 const MapCounter = styled.div`
-  position: fixed;
+  position: absolute;
   top: 2rem;
   left: 2rem;
   font-size: 2.5rem;
+`;
+
+const ResetButton = styled.button`
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+
+  :hover {
+    opacity: 0.8;
+  }
 `;
 
 export default Map;
