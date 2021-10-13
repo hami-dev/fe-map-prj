@@ -12,7 +12,6 @@ export const handleOnDrag = ({ dInfo, dAct }) => {
     return;
   }
   if (dInfo.chaY < 0 && dInfo.ny < dInfo.bottomLimit) {
-    console.log(dInfo.ny, dInfo.bottomLimit);
     dAct.setMoveBottom(true);
     return;
   }
