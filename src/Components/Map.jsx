@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Marker from './Marker';
 import CannotMove from './CannotMove';
+import { handleDragEnd, handleOnDrag } from 'Utils/handleDrag';
 
 function Map() {
   // img의 top, left
@@ -24,66 +25,44 @@ function Map() {
   const [moveTop, setMoveTop] = useState(false);
   const [moveBottom, setMoveBottom] = useState(false);
 
+  const dAct = {
+    setPosX,
+    setPosY,
+    setMoveLeft,
+    setMoveRight,
+    setMoveTop,
+    setMoveBottom,
+  };
+
   const onDragStart = (e) => {
     setOriginX(e.clientX);
     setOriginY(e.clientY);
   };
 
   const onDrag = (e) => {
-    const chaX = e.clientX != 0 && e.clientX - originX;
-    const chaY = e.clientY != 0 && e.clientY - originY;
-    const nx = posX + chaX;
-    const ny = posY + chaY;
-    const rightLimit = (mapImage.current.width - 1024) * -1;
-    const bottomLimit = (mapImage.current.height - 768) * -1;
-    if (nx > 0) {
-      setMoveLeft(true);
-      return;
-    }
-    if (chaX < 0 && nx < rightLimit) {
-      setMoveRight(true);
-      return;
-    }
-    if (ny > 0) {
-      setMoveTop(true);
-      return;
-    }
-    if (ny < bottomLimit) {
-      setMoveBottom(true);
-      return;
-    }
+    const dInfo = {
+      chaX: e.clientX != 0 && e.clientX - originX,
+      chaY: e.clientY != 0 && e.clientY - originY,
+      nx: posX + e.clientX - originX,
+      ny: posY + e.clientY - originY,
+      rightLimit: (mapImage.current.width - 1024) * -1,
+      bottomLimit: (mapImage.current.height - 768) * -1,
+    };
+
+    handleOnDrag({ dInfo, dAct });
   };
 
   const onDragEnd = (e) => {
-    const chaX = e.clientX - originX;
-    const chaY = e.clientY - originY;
-    const nx = posX + chaX;
-    const ny = posY + chaY;
-    const rightLimit = (mapImage.current.width - 1024) * -1;
-    const bottomLimit = (mapImage.current.height - 768) * -1;
-    if (nx > 0) {
-      setPosX(0);
-      setMoveLeft(false);
-      return;
-    }
-    if (nx < rightLimit) {
-      setPosX(rightLimit);
-      setMoveRight(false);
-      return;
-    }
-    if (ny > 0) {
-      setPosY(0);
-      setMoveTop(false);
-      return;
-    }
-    if (ny < bottomLimit) {
-      setPosY(bottomLimit);
-      setMoveBottom(false);
-      return;
-    }
+    const dInfo = {
+      chaX: e.clientX - originX,
+      chaY: e.clientY - originY,
+      nx: posX + e.clientX - originX,
+      ny: posY + e.clientY - originY,
+      rightLimit: (mapImage.current.width - 1024) * -1,
+      bottomLimit: (mapImage.current.height - 768) * -1,
+    };
 
-    setPosX(nx);
-    setPosY(ny);
+    handleDragEnd({ dInfo, dAct });
   };
 
   // 우클릭 시
