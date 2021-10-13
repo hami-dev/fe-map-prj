@@ -137,6 +137,10 @@ const MapWrapper = styled.div`
   border: 1px solid #d0b6b6;
   overflow: hidden;
   margin: 3rem 3rem;
+
+  :hover {
+    cursor: grab;
+  }
 `;
 
 const MapImage = styled.div`

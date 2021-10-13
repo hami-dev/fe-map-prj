@@ -2,7 +2,6 @@ const KEY = 'myMarkers';
 
 export const getDataFromLS = () => {
   const markerFromLS = localStorage.getItem(KEY);
-  console.log(markerFromLS);
   return JSON.parse(markerFromLS);
 };
 
