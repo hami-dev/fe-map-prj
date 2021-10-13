@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Marker from './Marker';
+import CannotMove from './CannotMove';
 
 function Map() {
   // img의 top, left
@@ -17,9 +18,40 @@ function Map() {
   // 마커
   const [markers, setMarkers] = useState([]);
 
+  // 이동 불가 상태
+  const [moveLeft, setMoveLeft] = useState(false);
+  const [moveRight, setMoveRight] = useState(false);
+  const [moveTop, setMoveTop] = useState(false);
+  const [moveBottom, setMoveBottom] = useState(false);
+
   const onDragStart = (e) => {
     setOriginX(e.clientX);
     setOriginY(e.clientY);
+  };
+
+  const onDrag = (e) => {
+    const chaX = e.clientX != 0 && e.clientX - originX;
+    const chaY = e.clientY != 0 && e.clientY - originY;
+    const nx = posX + chaX;
+    const ny = posY + chaY;
+    const rightLimit = (mapImage.current.width - 1024) * -1;
+    const bottomLimit = (mapImage.current.height - 768) * -1;
+    if (nx > 0) {
+      setMoveLeft(true);
+      return;
+    }
+    if (chaX < 0 && nx < rightLimit) {
+      setMoveRight(true);
+      return;
+    }
+    if (ny > 0) {
+      setMoveTop(true);
+      return;
+    }
+    if (ny < bottomLimit) {
+      setMoveBottom(true);
+      return;
+    }
   };
 
   const onDragEnd = (e) => {
@@ -27,22 +59,29 @@ function Map() {
     const chaY = e.clientY - originY;
     const nx = posX + chaX;
     const ny = posY + chaY;
+    const rightLimit = (mapImage.current.width - 1024) * -1;
+    const bottomLimit = (mapImage.current.height - 768) * -1;
     if (nx > 0) {
       setPosX(0);
+      setMoveLeft(false);
       return;
     }
-    if (nx < (mapImage.current.width - 1024) * -1) {
-      setPosX((mapImage.current.width - 1024) * -1);
+    if (nx < rightLimit) {
+      setPosX(rightLimit);
+      setMoveRight(false);
       return;
     }
     if (ny > 0) {
       setPosY(0);
+      setMoveTop(false);
       return;
     }
-    if (ny < (mapImage.current.height - 768) * -1) {
-      setPosY((mapImage.current.height - 768) * -1);
+    if (ny < bottomLimit) {
+      setPosY(bottomLimit);
+      setMoveBottom(false);
       return;
     }
+
     setPosX(nx);
     setPosY(ny);
   };
@@ -62,12 +101,13 @@ function Map() {
 
   return (
     <>
-      <MapWrapper>
+      <MapWrapper left={moveLeft}>
         <MapImage
           posX={posX}
           posY={posY}
           draggable
           onDragStart={onDragStart}
+          onDrag={onDrag}
           onDragEnd={onDragEnd}
           onContextMenu={onContextMenu}
         >
@@ -82,10 +122,22 @@ function Map() {
               ))}
           </Markers>
         </MapImage>
-        <MapCounter>📌I have {markers.length} markers</MapCounter>
+        <MapCounter
+          onMouseDown={(e) => {
+            e.preventDefault();
+          }}
+        >
+          📌I have {markers.length} markers
+        </MapCounter>
         <ResetButton onClick={handleReset}>
           <img src={process.env.PUBLIC_URL + '/images/reset.png'} />
         </ResetButton>
+        <CannotMove
+          moveLeft={moveLeft}
+          moveRight={moveRight}
+          moveTop={moveTop}
+          moveBottom={moveBottom}
+        />
       </MapWrapper>
     </>
   );
