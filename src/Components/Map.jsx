@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Marker from './Marker';
 import CannotMove from './CannotMove';
 import { handleDragEnd, handleOnDrag } from 'Utils/handleDrag';
+import { getDataFromLS, setDataToLS } from 'Utils/handleLS';
 
 function Map() {
   // img의 top, left
@@ -16,14 +17,19 @@ function Map() {
   // 지도 image
   const mapImage = useRef();
 
-  // 마커
-  const [markers, setMarkers] = useState([]);
-
   // 이동 불가 상태
   const [moveLeft, setMoveLeft] = useState(false);
   const [moveRight, setMoveRight] = useState(false);
   const [moveTop, setMoveTop] = useState(false);
   const [moveBottom, setMoveBottom] = useState(false);
+
+  // 마커
+  const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    const markerFromLS = getDataFromLS() || [];
+    setMarkers(markerFromLS);
+  }, []);
 
   const dAct = {
     setPosX,
@@ -72,10 +78,12 @@ function Map() {
     const tempY = e.clientY;
     const tempMark = [markers.length + 1, tempX - posX, tempY - posY]; // marker 번호, X, Y
     setMarkers((prev) => [...prev, tempMark]);
+    setDataToLS([...markers, tempMark]);
   };
 
   const handleReset = () => {
     setMarkers([]);
+    setDataToLS([]);
   };
 
   return (

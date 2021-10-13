@@ -1,5 +1,4 @@
 export const handleOnDrag = ({ dInfo, dAct }) => {
-  console.log('차 : ', dInfo.chaX, dInfo.chaY);
   if (dInfo.nx > 0) {
     dAct.setMoveLeft(true);
     return;
@@ -14,7 +13,6 @@ export const handleOnDrag = ({ dInfo, dAct }) => {
   }
   if (dInfo.chaY < 0 && dInfo.ny < dInfo.bottomLimit) {
     console.log(dInfo.ny, dInfo.bottomLimit);
-    console.log('true bottom');
     dAct.setMoveBottom(true);
     return;
   }
@@ -37,7 +35,6 @@ export const handleDragEnd = ({ dInfo, dAct }) => {
     return;
   }
   if (dInfo.ny < dInfo.bottomLimit) {
-    console.log('false bottom');
     dAct.setPosY(dInfo.bottomLimit);
     dAct.setMoveBottom(false);
     return;
