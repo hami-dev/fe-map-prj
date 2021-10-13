@@ -47,8 +47,8 @@ function Map() {
 
   const onDrag = (e) => {
     const dInfo = {
-      chaX: e.clientX != 0 && e.clientX - originX,
-      chaY: e.clientY != 0 && e.clientY - originY,
+      chaX: e.clientX !== 0 && e.clientX - originX,
+      chaY: e.clientY !== 0 && e.clientY - originY,
       nx: posX + e.clientX - originX,
       ny: posY + e.clientY - originY,
       rightLimit: (mapImage.current.width - 1024) * -1,
@@ -100,6 +100,7 @@ function Map() {
         >
           <img
             src={process.env.PUBLIC_URL + '/images/map.png'}
+            alt="map"
             ref={mapImage}
           />
           <Markers posX={posX} posY={posY}>
@@ -117,7 +118,10 @@ function Map() {
           📌I have {markers.length} markers
         </MapCounter>
         <ResetButton onClick={handleReset}>
-          <img src={process.env.PUBLIC_URL + '/images/reset.png'} />
+          <img
+            src={process.env.PUBLIC_URL + '/images/reset.png'}
+            alt="reset btn"
+          />
         </ResetButton>
         <CannotMove
           moveLeft={moveLeft}
