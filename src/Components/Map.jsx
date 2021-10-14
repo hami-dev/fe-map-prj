@@ -106,7 +106,11 @@ function Map() {
           <Markers posX={posX} posY={posY}>
             {markers &&
               markers.map((item) => (
-                <Marker markerX={item[1] - 75} markerY={item[2] - 160} />
+                <Marker
+                  key={item[0]}
+                  markerX={item[1] - 75}
+                  markerY={item[2] - 160}
+                />
               ))}
           </Markers>
         </MapImage>
