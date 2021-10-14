@@ -31,3 +31,7 @@ yarn start
 <br>
 
 ![mapMarker1](https://user-images.githubusercontent.com/60386993/137181963-fa1fc462-6897-44af-a3d6-36fe2b17fc46.gif)
+
+- react를 사용했습니다.
+- 지도의 끝으로 갔을 시 '더이상 드래그 할 수 없음' 표시가 나타납니다.
+- 마커를 추가할 시 LocalStorage에 저장하고, Reset 버튼을 누를 시 모두 삭제합니다.
