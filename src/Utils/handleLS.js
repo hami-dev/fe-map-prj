@@ -8,3 +8,7 @@ export const getDataFromLS = () => {
 export const setDataToLS = (item) => {
   localStorage.setItem(KEY, JSON.stringify(item));
 };
+
+export const deleteDataFromLS = () => {
+  localStorage.removeItem(KEY);
+};

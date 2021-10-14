@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Marker from './Marker';
 import CannotMove from './CannotMove';
 import { handleDragEnd, handleOnDrag } from 'Utils/handleDrag';
-import { getDataFromLS, setDataToLS } from 'Utils/handleLS';
+import { getDataFromLS, setDataToLS, deleteDataFromLS } from 'Utils/handleLS';
 
 function Map() {
   // img의 top, left
@@ -83,7 +83,7 @@ function Map() {
 
   const handleReset = () => {
     setMarkers([]);
-    setDataToLS([]);
+    deleteDataFromLS();
   };
 
   return (
